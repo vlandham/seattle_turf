@@ -37,12 +37,20 @@ var featureLayer = L.mapbox.featureLayer()
     .on('ready', run)
 
 function run() {
-  var scale = d3.scale.linear().domain([0,1]).range(["#e5f5e0", "#31a354"]);
+  var scale = d3.scale.linear().domain([0,0.5]).range(["#e5f5e0", "#31a354"]);
+  var avgs = [];
+  var counts = [];
+  featureLayer.eachLayer(function(l) {
+      var avg = l.feature.properties.sum / l.feature.properties.count;
+      avgs.push(avg);
+      counts.push( l.feature.properties.count);
+      });
+  console.log(d3.extent(counts));
   featureLayer.eachLayer(function(l) {
     if(l.feature.properties.count > 0) {
       
       var avg = l.feature.properties.sum / l.feature.properties.count;
-      l.setStyle({stroke:false,opacity:0.7, fillColor:scale(avg)});
+      l.setStyle({stroke:false,opacity:0.9, fillColor:scale(avg)});
     } else {
       l.setStyle({stroke:false,opacity:0.0, fill:false});
     }
