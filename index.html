@@ -20,7 +20,7 @@ var map = L.mapbox.map('map', 'examples.map-i86nkdio')
     .setView([47.60621, -122.33207], 12);
 
 var parkLayer = L.mapbox.featureLayer()
-    .loadURL('/parks.json')
+    .loadURL('./parks.json')
     .addTo(map)
     .on('ready', park);
 
@@ -32,7 +32,7 @@ function park() {
 }
 
 var featureLayer = L.mapbox.featureLayer()
-    .loadURL('/grid.json')
+    .loadURL('./grid.json')
     .addTo(map)
     .on('ready', run)
 
