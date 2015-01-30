@@ -18,7 +18,7 @@ function getPoints(filename) {
 
 function makeGrid(points) {
   var extent = turf.extent(points);
-  var hexgrid = turf.hex(extent, 0.002);
+  var hexgrid = turf.hex(extent, 0.004);
   hexgrid.features.forEach(function(hex) {
     var hex_points = turf.within(points, turf.featurecollection([hex]));
     hex.properties.count = hex_points.features.length;
