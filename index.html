@@ -5,6 +5,7 @@
 <title>A simple map</title>
 <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
 <style>
   body { margin:0; padding:0; }
@@ -18,14 +19,38 @@ L.mapbox.accessToken = 'pk.eyJ1IjoidmxhbmRoYW0iLCJhIjoiOE8wZUczcyJ9.UrgPQHr3um51
 var map = L.mapbox.map('map', 'examples.map-i86nkdio')
     .setView([47.60621, -122.33207], 12);
 
-var featureLayer = L.mapbox.featureLayer()
+var parkLayer = L.mapbox.featureLayer()
     .loadURL('/parks.json')
     .addTo(map)
-    .setStyle({stoke:false, color:"green", opacity:0.8});
+    .on('ready', park);
 
-/* var featureLayer = L.mapbox.featureLayer() */
-/*     .loadURL('/park_centroids.json') */
-/*     .addTo(map); */
+function park() {
+  parkLayer.eachLayer(function(l) {
+    l.setStyle({stroke:false, opacity:0.9, fillColor:"#84A956"});
+  });
+
+}
+
+var featureLayer = L.mapbox.featureLayer()
+    .loadURL('/grid.json')
+    .addTo(map)
+    .on('ready', run)
+
+function run() {
+  var scale = d3.scale.linear().domain([0,1]).range(["#e5f5e0", "#31a354"]);
+  featureLayer.eachLayer(function(l) {
+    if(l.feature.properties.count > 0) {
+      
+      var avg = l.feature.properties.sum / l.feature.properties.count;
+      l.setStyle({stroke:false,opacity:0.7, fillColor:scale(avg)});
+    } else {
+      l.setStyle({stroke:false,opacity:0.0, fill:false});
+    }
+});
+    /* window.setTimeout(function() { */
+    /*     featureLayer.loadURL('https://wanderdrone.appspot.com/'); */
+    /* }, 2000); */
+}
 </script>
 </body>
 </html>
