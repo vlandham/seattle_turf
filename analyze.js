@@ -33,7 +33,7 @@ function findNearest(filename, centroids) {
       var building_centroid = turf.centroid(building);
       var nearest_park = turf.nearest(building_centroid, centroids);
       var distance = turf.distance(building_centroid, nearest_park, 'miles');
-      if (true) { //(distance > 1.0) {
+      if (distance < 5.0) { //(distance > 1.0) {
         building.properties.nearest_park = nearest_park.properties['NAME'];
         building.properties.nearest_park_dist = distance;
         building_centroid.properties = building.properties;
